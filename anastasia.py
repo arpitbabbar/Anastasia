@@ -1,34 +1,45 @@
 import os
+from pprint import pprint
 from apikey import apikey, serpapi
 
-from langchain.document_loaders import DirectoryLoader
-from langchain.text_splitter import RecursiveCharacterTextSplitter
+from langchain.document_loaders import DirectoryLoader, TextLoader
+from langchain.text_splitter import RecursiveCharacterTextSplitter, CharacterTextSplitter
 from langchain.embeddings import OpenAIEmbeddings
 from langchain.vectorstores import Chroma
 
 
-text_splitter = RecursiveCharacterTextSplitter(chunk_size=200, chunk_overlap=10,add_start_index=True)
+os.environ['OPENAI_API_KEY'] = apikey
+text_splitter = CharacterTextSplitter(separator="\n", chunk_size=5, chunk_overlap=1)
 embeddings = OpenAIEmbeddings()
 # Persist on Vector
 vectorstore = Chroma(embedding_function=OpenAIEmbeddings(), persist_directory="J:\ChromaDb")
 
 
 def main():
-    print("Main Function")
-    os.environ['OPENAI_API_KEY'] = apikey
+    pprint("Main Function")
+    load_bot_profile()
 
 
 def query_to_llm(query):
-    print("Query to LLM")
+    pprint("Query to LLM")
 
 
 def load_bot_profile():
-    print("Loading Bot Profile")
-    loader = DirectoryLoader('profiles/', glob='**/*.txt')
+    pprint("Loading Bot Profile")
+    # loader = DirectoryLoader('profiles/', glob='**/*.txt')
+    loader = TextLoader('profiles/Anastasia_profile.txt')
     document = loader.load()
-    print(document)
+    # pprint(len(document))
+    # pprint(document)
+    load_docs_to_vector(document)
 
 
 def load_docs_to_vector(document):
-    print("Loading documents to vector")
-    db = Chroma.from_documents(document, OpenAIEmbeddings())
+    pprint("Loading documents to vector")
+    texts = text_splitter.split_documents(document)
+    pprint(len(texts))
+    pprint(texts)
+    db = Chroma.from_documents(texts, OpenAIEmbeddings())
+
+
+main()
