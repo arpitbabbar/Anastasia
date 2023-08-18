@@ -74,11 +74,11 @@ while True:
     result = qa({"query": query})
     pprint(result)
     doc = result['result']
-    pprint(doc)
-    pprint(result['source_documents'])
+    # pprint(doc)
+    # pprint(result['source_documents'])
     # chain = LLMChain(llm=llm, prompt=prompt)
     # ans = chain.run(user_input=user_prompt, doc=doc)
     ans = doc
     pprint("Anastasia: " + ans)
-    pprint(user_memory)
-    pprint(user_memory.buffer)
+    # pprint(user_memory)
+    # pprint(user_memory.buffer)
