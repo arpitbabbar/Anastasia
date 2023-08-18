@@ -25,7 +25,7 @@ llm = ChatOpenAI(temperature="1.0", model="gpt-3.5-turbo-0613")
 #ChatOpenAI(model="text-ada-001", temperature=0.2)
 
 llm_prompt_template = """
-    You are an AI assistant model mimicking human behaviour. Use your knowledge and try to understand the context {context} to answer user queries. If you don't know the answer, reply politely that you don't know , try to be as human as possible
+    You are an AI assistant model mimicking human behaviour. Use your knowledge and try to understand the context to answer user queries. If you don't know the answer, reply politely that you don't know , try to be as human as possible
     in your answers.
     
     Bot also has a profile stored in a vector database which returned the following answer when queried.
@@ -129,7 +129,8 @@ def load_docs_to_vector(document):
 
 def add_new_bot_profile():
     pprint("Adding new bot profile")
-    vector_db.upload_bot_profile('profiles/Anastasia_profile.txt', 1)
+
+    vector_db.upload_bot_profile_dir('yo', 1)
 
 
 main()

@@ -2,8 +2,9 @@ import os
 
 from apikey import apikey
 from datetime import datetime
+from pprint import pprint
 
-from langchain.document_loaders import TextLoader
+from langchain.document_loaders import TextLoader, DirectoryLoader
 from langchain.text_splitter import CharacterTextSplitter
 from langchain.embeddings.openai import OpenAIEmbeddings
 from langchain.vectorstores import Chroma
@@ -27,6 +28,22 @@ def upload_bot_profile(file, bot_id):
     print("upload_bot_profile called")
     # loading data
     raw_documents = TextLoader(file).load()
+    documents = text_splitter.split_documents(raw_documents)
+    documents_with_header = []
+    for doc in documents:
+        doc.metadata.__setitem__("bot_id", bot_id)
+        doc.metadata.pop("source")
+        documents_with_header.append(doc)
+        print(doc)
+    vectorstore.add_documents(documents_with_header)
+
+
+def upload_bot_profile_dir(dir, bot_id):
+    print("upload_bot_profile called")
+    # loading data
+    loader = DirectoryLoader('../profiles/life/', glob="*.txt")
+    pprint(loader)
+    raw_documents = loader.load()
     documents = text_splitter.split_documents(raw_documents)
     documents_with_header = []
     for doc in documents:
